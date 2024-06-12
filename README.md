@@ -64,3 +64,241 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Laravel API with Sanctum
+
+This repository contains the source code for the Laravel API project using Sanctum, following the "[Laravel API Crash Course With Sanctum](https://www.youtube.com/watch?v=TzAJfjCn7Ks)" by Code With Dary. This project demonstrates how to implement authentication for SPAs, mobile applications, and simple API tokens using Laravel Sanctum.
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Technologies](#technologies)
+
+## Introduction
+This project serves as a comprehensive tutorial on setting up and using Laravel Sanctum for API authentication. It covers everything from setting up a Laravel project to implementing user authentication, protecting routes, and managing tasks.
+
+## Features
+- User Registration and Authentication
+- API Token Generation and Revocation
+- Protected Routes
+- CRUD Operations for Tasks
+
+## Installation
+To run this project locally, follow these steps:
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/diandrarad/Laravel-API-with-Sanctum.git
+    cd laravel-api-with-sanctum
+    ```
+
+2. Install dependencies:
+    ```bash
+    composer install
+    npm install
+    ```
+
+3. Copy the example environment file and configure the environment variables:
+    ```bash
+    cp .env.example .env
+    ```
+
+4. Generate the application key:
+    ```bash
+    php artisan key:generate
+    ```
+
+5. Set up the database:
+    - Create a MySQL database.
+    - Update the `.env` file with your database credentials.
+
+6. Run the migrations:
+    ```bash
+    php artisan migrate
+    ```
+
+7. Start the local development server:
+    ```bash
+    php artisan serve
+    ```
+
+8. Compile the assets:
+    ```bash
+    npm run dev
+    ```
+
+## Usage
+After setting up the project, you can use Postman or any other API client to interact with the API. The available endpoints and their functionalities are described below.
+
+## API Endpoints
+
+### Authentication
+- **Register**: `POST /api/register`
+    - Request: 
+        ```json
+        {
+            "name": "John Doe",
+            "email": "john@example.com",
+            "password": "password"
+        }
+        ```
+    - Response:
+        ```json
+        {
+            "success": true,
+            "data": {
+                "user": {
+                    "id": 1,
+                    "name": "John Doe",
+                    "email": "john@example.com",
+                    "created_at": "2024-06-09T12:00:00.000000Z",
+                    "updated_at": "2024-06-09T12:00:00.000000Z"
+                },
+                "token": "your-api-token"
+            }
+        }
+        ```
+
+- **Login**: `POST /api/login`
+    - Request: 
+        ```json
+        {
+            "email": "john@example.com",
+            "password": "password"
+        }
+        ```
+    - Response:
+        ```json
+        {
+            "success": true,
+            "data": {
+                "user": {
+                    "id": 1,
+                    "name": "John Doe",
+                    "email": "john@example.com",
+                    "created_at": "2024-06-09T12:00:00.000000Z",
+                    "updated_at": "2024-06-09T12:00:00.000000Z"
+                },
+                "token": "your-api-token"
+            }
+        }
+        ```
+
+- **Logout**: `POST /api/logout`
+    - Header: `Authorization: Bearer {token}`
+    - Response:
+        ```json
+        {
+            "success": true,
+            "data": {
+                "message": "You have successfully been logged out and your token has been deleted"
+            }
+        }
+        ```
+
+### Tasks
+- **Get All Tasks**: `GET /api/tasks`
+    - Header: `Authorization: Bearer {token}`
+    - Response:
+        ```json
+        [
+            {
+                "id": 1,
+                "user_id": 1,
+                "name": "Task 1",
+                "description": "Description 1",
+                "priority": "High",
+                "created_at": "2024-06-09T12:00:00.000000Z",
+                "updated_at": "2024-06-09T12:00:00.000000Z"
+            },
+            ...
+        ]
+        ```
+
+- **Create Task**: `POST /api/tasks`
+    - Header: `Authorization: Bearer {token}`
+    - Request: 
+        ```json
+        {
+            "name": "New Task",
+            "description": "New Description",
+            "priority": "High"
+        }
+        ```
+    - Response:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "user_id": 1,
+                "name": "New Task",
+                "description": "New Description",
+                "priority": "High",
+                "created_at": "2024-06-09T12:00:00.000000Z",
+                "updated_at": "2024-06-09T12:00:00.000000Z"
+            }
+        }
+        ```
+
+- **Get Task by ID**: `GET /api/tasks/{id}`
+    - Header: `Authorization: Bearer {token}`
+    - Response:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "user_id": 1,
+                "name": "Task 1",
+                "description": "Description 1",
+                "priority": "High",
+                "created_at": "2024-06-09T12:00:00.000000Z",
+                "updated_at": "2024-06-09T12:00:00.000000Z"
+            }
+        }
+        ```
+
+- **Update Task**: `PUT /api/tasks/{id}`
+    - Header: `Authorization: Bearer {token}`
+    - Request:
+        ```json
+        {
+            "name": "Updated Task",
+            "description": "Updated Description",
+            "priority": "Medium"
+        }
+        ```
+    - Response:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "user_id": 1,
+                "name": "Updated Task",
+                "description": "Updated Description",
+                "priority": "Medium",
+                "created_at": "2024-06-09T12:00:00.000000Z",
+                "updated_at": "2024-06-09T12:00:00.000000Z"
+            }
+        }
+        ```
+
+- **Delete Task**: `DELETE /api/tasks/{id}`
+    - Header: `Authorization: Bearer {token}`
+    - Response:
+        ```json
+        {
+            "success": true,
+            "message": "Task deleted"
+        }
+        ```
+
+## Technologies
+- Laravel
+- PHP
+- MySQL
+- Laravel Sanctum
+- Composer
+- NPM
